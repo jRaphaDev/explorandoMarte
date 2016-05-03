@@ -1,7 +1,6 @@
 package br.com.elo7.logic;
 
 import javax.inject.Named;
-import javax.transaction.Transactional;
 
 import br.com.elo7.model.Sonda;
 
@@ -16,7 +15,6 @@ import br.com.elo7.model.Sonda;
 */
 
 @Named
-@Transactional
 public class DefaultSondaLogic implements SondaLogic{
 
 	private Sonda sonda;
