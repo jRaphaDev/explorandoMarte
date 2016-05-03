@@ -1,10 +1,25 @@
 package br.com.elo7.logic;
 
+import javax.inject.Named;
+import javax.transaction.Transactional;
+
 import br.com.elo7.model.Sonda;
 
+/**
+* 
+* @author Raphael Freitas
+* 
+* A classe DefaultSondaLogic é responsavel por ter os metodos dos quais foram criados na interface SondaLogic e 
+* mais métodos privados
+* 
+*@version 1.0
+*/
+
+@Named
+@Transactional
 public class DefaultSondaLogic implements SondaLogic{
 
-private Sonda sonda;
+	private Sonda sonda;
 	
 	public DefaultSondaLogic() {
 		this.sonda = new Sonda();
