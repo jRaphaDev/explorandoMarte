@@ -2,6 +2,9 @@ package br.com.elo7.logic;
 
 import javax.inject.Named;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.elo7.model.Sonda;
 
 /**
@@ -18,7 +21,8 @@ import br.com.elo7.model.Sonda;
 public class DefaultSondaLogic implements SondaLogic{
 
 	private Sonda sonda;
-	
+	private Logger logger = LoggerFactory.getLogger(DefaultSondaLogic.class);
+
 	public DefaultSondaLogic() {
 		this.sonda = new Sonda();
 	}
@@ -30,17 +34,19 @@ public class DefaultSondaLogic implements SondaLogic{
 	 * @throws Exception 
 	 */
 	@Override
-	public String posicionar(String posicao) throws Exception {
+	public void posicionar(String posicao) throws Exception {
 		try {
 
 			String posicaoNova = verificaPosicao(posicao);
+			
 			sonda.setPosicaoX(Integer.parseInt(String.valueOf(posicaoNova.charAt(0))));
 			sonda.setPosicaoY(Integer.parseInt(String.valueOf(posicaoNova.charAt(1))));
 			sonda.setSentido(posicaoNova.charAt(2));
 
-			return "Posição iniciada";
+			//return "Posicao iniciada";
 			
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw e;
 		}
 	}
@@ -63,6 +69,7 @@ public class DefaultSondaLogic implements SondaLogic{
 			}
 			return pegarPosicaoAtual();
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			return e.getMessage();
 		}
 	}
@@ -77,29 +84,29 @@ public class DefaultSondaLogic implements SondaLogic{
 			char sentido = posicao.charAt(2);
 			
 			if (posicao.length() > 3) {
-				System.out.println("Só é permitido 3 caracteres sendo dois numeros e uma letra.");
-				throw new Exception("Só é permitido 3 caracteres sendo dois numeros e uma letra.");
+				logger.error("So e permitido 3 caracteres sendo dois numeros e uma letra.");
+				throw new Exception("So e permitido 3 caracteres sendo dois numeros e uma letra.");
 			}
 
 			if (posicaoX > 8 || posicaoX < 0) {
-				System.out.println("Posicionamento inválido, a posição x só é valida entre no minimo 0 e no máximo 8");
-				throw new Exception("Posicionamento inválido, a posição x só é valida entre no minimo 0 e no máximo 8");
+				logger.error("Posicionamento invalido, a posição x so e valida entre no minimo 0 e no maximo 8");
+				throw new Exception("Posicionamento invalido, a posição x so e valida entre no minimo 0 e no maximo 8");
 			}
 			
 			if (posicaoY > 5 || posicaoY < 0) {
-				System.out.println("Posicionamento inválido, a posição y só é valida entre no minimo 0 e no máximo 5");
-				throw new Exception("Posicionamento inválido, a posição y só é valida entre no minimo 0 e no máximo 5");
+				logger.error("Posicionamento invalido, a posicao y so e valida entre no minimo 0 e no maximo 5");
+				throw new Exception("Posicionamento invalido, a posicao y so e valida entre no minimo 0 e no maximo 5");
 			}
 			
 			if (sentido != 'N' && sentido != 'S' && sentido != 'E' && sentido != 'W') {
-				System.out.println("Ultimo argumento inválido, o sentido da sonda deve ser 'N', 'S', 'E' ou 'W'");
-				throw new Exception("Ultimo argumento inválido, o sentido da sonda deve ser 'N', 'S', 'E' ou 'W'");
+				logger.error("Ultimo argumento invalido, o sentido da sonda deve ser 'N', 'S', 'E' ou 'W'");
+				throw new Exception("Ultimo argumento invalido, o sentido da sonda deve ser 'N', 'S', 'E' ou 'W'");
 			}
 
 			return posicao;		
 		} catch (NumberFormatException nfe) {
 			
-			System.out.println("Posicionamento inválido, só é permitido um numero para x, um numero para y e uma letra para o sentido.");
+			logger.error("Posicionamento inválido, só é permitido um numero para x, um numero para y e uma letra para o sentido.");
 			throw new NumberFormatException("Posicionamento inválido, só é permitido um numero para x, um numero para y e uma letra para o sentido.");
 			
 		}
@@ -127,6 +134,7 @@ public class DefaultSondaLogic implements SondaLogic{
 					break;
 			}
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw e;
 		}
 	}
@@ -154,6 +162,7 @@ public class DefaultSondaLogic implements SondaLogic{
 			}
 			sonda.setSentido(sentido);
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw e;
 		}
 	}
@@ -168,10 +177,12 @@ public class DefaultSondaLogic implements SondaLogic{
 		try {
 			for (int a=0; a<instrucao.length(); a++) {
 				if (instrucao.charAt(a) != 'M' && instrucao.charAt(a) != 'L' && instrucao.charAt(a) != 'R') {
-					throw new Exception("O caracter " + instrucao.charAt(a) + " não é valido.");
+					logger.error("O caracter " + instrucao.charAt(a) + " nao e valido.");
+					throw new Exception("O caracter " + instrucao.charAt(a) + " nao e valido.");
 				}
 			}
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw e;
 		}
 	}

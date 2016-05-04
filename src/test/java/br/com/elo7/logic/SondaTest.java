@@ -88,7 +88,7 @@ public class SondaTest {
 		//test
 		assertNotNull(retorno);
 		assertFalse(retorno.isEmpty());
-		assertEquals("O caracter S não é valido.", retorno);
+		assertEquals("O caracter S nao e valido.", retorno);
 	}
 
 	//Test instruções contem caracter inválido '-'.
@@ -100,7 +100,7 @@ public class SondaTest {
 		//test
 		assertNotNull(retorno);
 		assertFalse(retorno.isEmpty());
-		assertEquals("O caracter - não é valido.", retorno);
+		assertEquals("O caracter - nao e valido.", retorno);
 	}
 	
 	//Test instruções contem numeros
@@ -112,7 +112,7 @@ public class SondaTest {
 		//test
 		assertNotNull(retorno);
 		assertFalse(retorno.isEmpty());
-		assertEquals("O caracter 1 não é valido.", retorno);
+		assertEquals("O caracter 1 nao e valido.", retorno);
 	}
 	
 	@Test
