@@ -175,6 +175,7 @@ public class DefaultSondaLogic implements SondaLogic{
 	 */
 	private void verificaInstrucao(String instrucao) throws Exception {
 		try {
+		    instrucao = instrucao.toUpperCase();
 			for (int a=0; a<instrucao.length(); a++) {
 				if (instrucao.charAt(a) != 'M' && instrucao.charAt(a) != 'L' && instrucao.charAt(a) != 'R') {
 					logger.error("O caracter " + instrucao.charAt(a) + " nao e valido.");

@@ -26,7 +26,7 @@ public class DefaultSondaService implements SondaService{
 			return Response.noContent().build();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e).build();
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
 		}
 	}
 
@@ -37,7 +37,7 @@ public class DefaultSondaService implements SondaService{
 			return Response.status(Status.OK).entity(posicaoAtual).build();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e).build();
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
 		}
 	}
 
