@@ -4,5 +4,5 @@ public interface SondaLogic {
 
 	void posicionar(String posicao) throws Exception;
 
-	String setarInstrucoes(String intrucoes);
+	String setarInstrucoes(String intrucoes) throws Exception;
 }

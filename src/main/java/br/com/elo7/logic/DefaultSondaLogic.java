@@ -37,14 +37,13 @@ public class DefaultSondaLogic implements SondaLogic{
 	public void posicionar(String posicao) throws Exception {
 		try {
 
-			String posicaoNova = verificaPosicao(posicao);
-			
-			sonda.setPosicaoX(Integer.parseInt(String.valueOf(posicaoNova.charAt(0))));
-			sonda.setPosicaoY(Integer.parseInt(String.valueOf(posicaoNova.charAt(1))));
-			sonda.setSentido(posicaoNova.charAt(2));
+		    posicao = verificaPosicao(posicao);
 
-			//return "Posicao iniciada";
-			
+			sonda.setPosicaoX(Integer.parseInt(String.valueOf(posicao.charAt(0))));
+			sonda.setPosicaoY(Integer.parseInt(String.valueOf(posicao.charAt(1))));
+			sonda.setSentido(posicao.charAt(2));
+			sonda.setIniciada(true);
+
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			throw e;
@@ -57,17 +56,22 @@ public class DefaultSondaLogic implements SondaLogic{
 	 * @return retorna Posição atual quando as intruções forem validadas e retornar true ou "Instrução inválida" quando as instruções forem validadas e retornar false.
 	 */
 	@Override
-	public String setarInstrucoes(String instrucoes) {
+	public String setarInstrucoes(String instrucao) throws Exception {
 		try {
-			verificaInstrucao(instrucoes);
-			for (int a = 0; a < instrucoes.length(); a++) {
-				if (instrucoes.charAt(a) == 'M') {
-					moverSonda();
-				} else {
-					direcionarSonda(instrucoes.charAt(a));
-				}
-			}
-			return pegarPosicaoAtual();
+		    if (sonda.isIniciada()) {
+    			instrucao = verificaInstrucao(instrucao);
+    			for (int a = 0; a < instrucao.length(); a++) {
+    				if (instrucao.charAt(a) == 'M') {
+    					moverSonda();
+    				} else {
+    					direcionarSonda(instrucao.charAt(a));
+    				}
+    			}
+    			return pegarPosicaoAtual();
+		    } else {
+		        logger.error("A sonda nao recebeu as posicoes para ser iniciada.");
+                throw new Exception("A sonda nao recebeu as posicoes para ser iniciada.");
+		    }
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			return e.getMessage();
@@ -79,14 +83,20 @@ public class DefaultSondaLogic implements SondaLogic{
 			posicao = posicao.replace(" ", "");
 			posicao = posicao.toUpperCase();
 			
-			int posicaoX = Integer.parseInt(String.valueOf(posicao.charAt(0)));
-			int posicaoY = Integer.parseInt(String.valueOf(posicao.charAt(1)));
-			char sentido = posicao.charAt(2);
 			
 			if (posicao.length() > 3) {
 				logger.error("So e permitido 3 caracteres sendo dois numeros e uma letra.");
 				throw new Exception("So e permitido 3 caracteres sendo dois numeros e uma letra.");
 			}
+			
+			if (posicao.length() < 3) {
+                logger.error("Nao e permitido menos de 3 caracteres ");
+                throw new Exception("Nao e permitido menos de 3 caracteres ");
+            }
+
+			int posicaoX = Integer.parseInt(String.valueOf(posicao.charAt(0)));
+            int posicaoY = Integer.parseInt(String.valueOf(posicao.charAt(1)));
+            char sentido = posicao.charAt(2);
 
 			if (posicaoX > 8 || posicaoX < 0) {
 				logger.error("Posicionamento invalido, a posição x so e valida entre no minimo 0 e no maximo 8");
@@ -103,7 +113,7 @@ public class DefaultSondaLogic implements SondaLogic{
 				throw new Exception("Ultimo argumento invalido, o sentido da sonda deve ser 'N', 'S', 'E' ou 'W'");
 			}
 
-			return posicao;		
+			return posicao;
 		} catch (NumberFormatException nfe) {
 			
 			logger.error("Posicionamento inválido, só é permitido um numero para x, um numero para y e uma letra para o sentido.");
@@ -145,7 +155,6 @@ public class DefaultSondaLogic implements SondaLogic{
 	 */
 	private void direcionarSonda(char sentido) {
 		try {
-			
 			switch (sonda.getSentido()) {
 				case 'N':
 					sentido = (sentido=='L') ? 'W':'E';
@@ -173,15 +182,17 @@ public class DefaultSondaLogic implements SondaLogic{
 	 * @return retorna true se não existir nenhum caracter alem do esperado e retorna false se vier algum caracter inválido.
 	 * @throws Exception 
 	 */
-	private void verificaInstrucao(String instrucao) throws Exception {
+	private String verificaInstrucao(String instrucao) throws Exception {
 		try {
 		    instrucao = instrucao.toUpperCase();
+
 			for (int a=0; a<instrucao.length(); a++) {
 				if (instrucao.charAt(a) != 'M' && instrucao.charAt(a) != 'L' && instrucao.charAt(a) != 'R') {
 					logger.error("O caracter " + instrucao.charAt(a) + " nao e valido.");
 					throw new Exception("O caracter " + instrucao.charAt(a) + " nao e valido.");
 				}
 			}
+			return instrucao;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			throw e;

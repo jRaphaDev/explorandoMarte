@@ -14,11 +14,13 @@ public class Sonda {
 	private int posicaoX;
 	private int posicaoY;
 	private char sentido;
+	private boolean iniciada;
 	
 	public Sonda() {
 		this.posicaoX = 8;
 		this.posicaoY = 5;
 		this.sentido = 'N';
+		this.iniciada = false;
 	}
 
 	public int getPosicaoX() {
@@ -44,5 +46,13 @@ public class Sonda {
 	public char getSentido(){
 		return sentido;
 	}
+
+    public boolean isIniciada() {
+        return iniciada;
+    }
+
+    public void setIniciada(boolean iniciada) {
+        this.iniciada = iniciada;
+    }
 
 }
