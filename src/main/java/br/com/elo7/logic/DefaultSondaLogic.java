@@ -25,24 +25,23 @@ public class DefaultSondaLogic implements SondaLogic{
 
 	/**
 	 * Esse método é responsável em dizer onde estará o posicionamento da sonda.
-	 * @param int posicaoX : posição x onde a sonda será posicionada (para cima ou para baixo).
-	 * @param int posicaoY : posição y onde a sonda será posicionada (para esquerda ou para direita).
-	 * @param String sentido : sentido para onde a sonda estará apontado
-	 * @return String "Posição iniciada" quando o sentido for validado e retornar true ou String "Sentido inválido" quando o sentido for validado e retornar false.
+	 * @param String posicao : String com as posições para posicionar a sonda.
+	 * @return String "Posição iniciada" quando a posição for validado e retornar a posicao modificada.
+	 * @throws Exception 
 	 */
 	@Override
-	public String setarPosicao(int posicaoX, int posicaoY, char sentido) {
+	public String posicionar(String posicao) throws Exception {
 		try {
-			if (verificaSentido(sentido)) {
-				sonda.setPosicaoX(posicaoX);
-				sonda.setPosicaoY(posicaoY);
-				sonda.setSentido(sentido);
-				return "Posicao iniciada";
-			} else {
-				return "Sentido inválido";
-			}
+
+			String posicaoNova = verificaPosicao(posicao);
+			sonda.setPosicaoX(Integer.parseInt(String.valueOf(posicaoNova.charAt(0))));
+			sonda.setPosicaoY(Integer.parseInt(String.valueOf(posicaoNova.charAt(1))));
+			sonda.setSentido(posicaoNova.charAt(2));
+
+			return "Posição iniciada";
+			
 		} catch (Exception e) {
-			return e.getMessage();
+			throw e;
 		}
 	}
 
@@ -54,20 +53,55 @@ public class DefaultSondaLogic implements SondaLogic{
 	@Override
 	public String setarInstrucoes(String instrucoes) {
 		try {
-			if (verificaInstrucao(instrucoes)) {
-				for (int a = 0; a < instrucoes.length(); a++) {
-					if (instrucoes.charAt(a) == 'M') {
-						moverSonda();
-					} else {
-						direcionarSonda(instrucoes.charAt(a));
-					}
+			verificaInstrucao(instrucoes);
+			for (int a = 0; a < instrucoes.length(); a++) {
+				if (instrucoes.charAt(a) == 'M') {
+					moverSonda();
+				} else {
+					direcionarSonda(instrucoes.charAt(a));
 				}
-				return pegarPosicaoAtual();
-			} else {
-				return "Instrução inválida";
 			}
+			return pegarPosicaoAtual();
 		} catch (Exception e) {
 			return e.getMessage();
+		}
+	}
+	
+	private String verificaPosicao(String posicao) throws Exception {
+		try {
+			posicao = posicao.replace(" ", "");
+			posicao = posicao.toUpperCase();
+			
+			int posicaoX = Integer.parseInt(String.valueOf(posicao.charAt(0)));
+			int posicaoY = Integer.parseInt(String.valueOf(posicao.charAt(1)));
+			char sentido = posicao.charAt(2);
+			
+			if (posicao.length() > 3) {
+				System.out.println("Só é permitido 3 caracteres sendo dois numeros e uma letra.");
+				throw new Exception("Só é permitido 3 caracteres sendo dois numeros e uma letra.");
+			}
+
+			if (posicaoX > 8 || posicaoX < 0) {
+				System.out.println("Posicionamento inválido, a posição x só é valida entre no minimo 0 e no máximo 8");
+				throw new Exception("Posicionamento inválido, a posição x só é valida entre no minimo 0 e no máximo 8");
+			}
+			
+			if (posicaoY > 5 || posicaoY < 0) {
+				System.out.println("Posicionamento inválido, a posição y só é valida entre no minimo 0 e no máximo 5");
+				throw new Exception("Posicionamento inválido, a posição y só é valida entre no minimo 0 e no máximo 5");
+			}
+			
+			if (sentido != 'N' && sentido != 'S' && sentido != 'E' && sentido != 'W') {
+				System.out.println("Ultimo argumento inválido, o sentido da sonda deve ser 'N', 'S', 'E' ou 'W'");
+				throw new Exception("Ultimo argumento inválido, o sentido da sonda deve ser 'N', 'S', 'E' ou 'W'");
+			}
+
+			return posicao;		
+		} catch (NumberFormatException nfe) {
+			
+			System.out.println("Posicionamento inválido, só é permitido um numero para x, um numero para y e uma letra para o sentido.");
+			throw new NumberFormatException("Posicionamento inválido, só é permitido um numero para x, um numero para y e uma letra para o sentido.");
+			
 		}
 	}
 
@@ -128,32 +162,15 @@ public class DefaultSondaLogic implements SondaLogic{
 	 * Esse método é responsável em verificar se na instrução enviada existe algum caracter diferente de 'M', 'L' e 'R'
 	 * @param instrucao
 	 * @return retorna true se não existir nenhum caracter alem do esperado e retorna false se vier algum caracter inválido.
+	 * @throws Exception 
 	 */
-	private boolean verificaInstrucao(String instrucao) {
+	private void verificaInstrucao(String instrucao) throws Exception {
 		try {
 			for (int a=0; a<instrucao.length(); a++) {
 				if (instrucao.charAt(a) != 'M' && instrucao.charAt(a) != 'L' && instrucao.charAt(a) != 'R') {
-					return false;
+					throw new Exception("O caracter " + instrucao.charAt(a) + " não é valido.");
 				}
 			}
-			return true;
-		} catch (Exception e) {
-			throw e;
-		}
-	}
-
-	
-	/**
-	 * Esse método é responsável em verificar se o sentido passado pelo usuário é diferente de 'N', 'S', 'E' e 'W'.
-	 * @param sentido
-	 * @return retorna true se não existir nenhum caracter alem do esperado e retorna false se vier alguma caracter inválido.
-	 */
-	private boolean verificaSentido(char sentido) {
-		try {
-			if (sentido == 'N' || sentido == 'S' || sentido == 'E' || sentido == 'W') {
-				return true;
-			}
-			return false;
 		} catch (Exception e) {
 			throw e;
 		}
