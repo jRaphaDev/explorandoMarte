@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import br.com.elo7.model.Sonda;
 
 /**
-* 
+
 * @author Raphael Freitas
 * 
 * A classe DefaultSondaLogic é responsavel por ter os metodos dos quais foram criados na interface SondaLogic e 
@@ -30,8 +30,6 @@ public class DefaultSondaLogic implements SondaLogic{
 	/**
 	 * Esse método é responsável em dizer onde estará o posicionamento da sonda.
 	 * @param String posicao : String com as posições para posicionar a sonda.
-	 * @return String "Posição iniciada" quando a posição for validado e retornar a posicao modificada.
-	 * @throws Exception 
 	 */
 	@Override
 	public void posicionar(String posicao) throws Exception {
@@ -53,7 +51,7 @@ public class DefaultSondaLogic implements SondaLogic{
 	/**
 	 * Esse método é responsável em destrinchar as instruções enviadas, e direcionar cada uma para sua respectiva função, seja mover a sonda uma casa ou direciona-la 90° para direita ou para esquerdar.
 	 * @param String instrucoes : instruções envidas pelo usuario, quando na instrução conter 'M' a função moverSonda() é chamada ou seja conter 'L' ou 'R', a função direcionaSonda(instruçao) é chamada.
-	 * @return retorna Posição atual quando as intruções forem validadas e retornar true ou "Instrução inválida" quando as instruções forem validadas e retornar false.
+	 * @return retorna Posição atual quando as intruções forem validadas e retornar true ou "A sonda nao recebeu as posicoes para ser iniciada." quando as instruções forem validadas e retornar false.
 	 */
 	@Override
 	public String setarInstrucoes(String instrucao) throws Exception {
@@ -74,15 +72,20 @@ public class DefaultSondaLogic implements SondaLogic{
 		    }
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			return e.getMessage();
+			throw e;
 		}
 	}
 	
+	/**
+	 * 
+	 * @param posicao as posicoes enviadas pelo usuario para serem validadas, e de acordo com o erro fazer um throw com a respectiva menssagem.
+	 * @return posicao tratada, sem espaços e tudo maiusculo.
+	 * @throws Exception
+	 */
 	private String verificaPosicao(String posicao) throws Exception {
 		try {
 			posicao = posicao.replace(" ", "");
 			posicao = posicao.toUpperCase();
-			
 			
 			if (posicao.length() > 3) {
 				logger.error("So e permitido 3 caracteres sendo dois numeros e uma letra.");
@@ -179,14 +182,14 @@ public class DefaultSondaLogic implements SondaLogic{
 	/**
 	 * Esse método é responsável em verificar se na instrução enviada existe algum caracter diferente de 'M', 'L' e 'R'
 	 * @param instrucao
-	 * @return retorna true se não existir nenhum caracter alem do esperado e retorna false se vier algum caracter inválido.
+	 * @return retorna instrucao tratada, sem espaços e tudo maiusculo.
 	 * @throws Exception 
 	 */
 	private String verificaInstrucao(String instrucao) throws Exception {
 		try {
 		    instrucao = instrucao.toUpperCase();
-
-			for (int a=0; a<instrucao.length(); a++) {
+		    instrucao = instrucao.replace(" ", "");
+		    for (int a=0; a<instrucao.length(); a++) {
 				if (instrucao.charAt(a) != 'M' && instrucao.charAt(a) != 'L' && instrucao.charAt(a) != 'R') {
 					logger.error("O caracter " + instrucao.charAt(a) + " nao e valido.");
 					throw new Exception("O caracter " + instrucao.charAt(a) + " nao e valido.");
