@@ -83,18 +83,5 @@ public class SondaServiceTestIT {
         when().
         get(PATH+"/instrucao/M");
 	}
-	
-	@Test
-	public void setarInstrucaoInvalida() {
-		expect().
-        statusCode(200).
-        when().
-        get(PATH+"/posicao/12N");
-		
-		expect().
-        statusCode(500).
-        when().
-        get(PATH+"/instrucao/MS");
-	}
 
 }

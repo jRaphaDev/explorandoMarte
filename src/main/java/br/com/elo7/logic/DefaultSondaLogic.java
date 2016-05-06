@@ -65,6 +65,7 @@ public class DefaultSondaLogic implements SondaLogic{
     					direcionarSonda(instrucao.charAt(a));
     				}
     			}
+    			sonda.setIniciada(false);
     			return pegarPosicaoAtual();
 		    } else {
 		        logger.error("A sonda nao recebeu as posicoes para ser iniciada.");
@@ -86,6 +87,11 @@ public class DefaultSondaLogic implements SondaLogic{
 		try {
 			posicao = posicao.replace(" ", "");
 			posicao = posicao.toUpperCase();
+			
+			if (sonda.isIniciada()) {
+				logger.error("A sonda já foi iniciada, envie as instrucoes.");
+				throw new Exception("A sonda já foi iniciada, envie as instrucoes.");
+			}
 			
 			if (posicao.length() > 3) {
 				logger.error("So e permitido 3 caracteres sendo dois numeros e uma letra.");
