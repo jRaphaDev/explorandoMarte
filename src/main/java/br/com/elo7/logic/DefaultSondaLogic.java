@@ -212,17 +212,19 @@ public class DefaultSondaLogic implements SondaLogic{
 			throw e;
 		}
 	}
-	
+
 	private void verificaPerimetro(int posX, int posY) throws Exception {
 		try {
 			if (posX > 8 || posX < 0) {
 				resultadoX = sonda.getPosicaoX();
+				resultadoSentido = sonda.getSentido();
 				logger.error("O resultado da instrucao levara o ponto x ultrapassar o perimetro de no maximo 8 e no minimo 0");
 				throw new Exception("O resultado da instrucao levara o ponto x ultrapassar o perimetro de no maximo 8 e no minimo 0");
 			}
 			
 			if (posY > 5 || posY < 0) {
 				resultadoY = sonda.getPosicaoY();
+				resultadoSentido = sonda.getSentido();
 				logger.error("O resultado da instrucao levara o ponto y ultrapassar o perimetro de no maximo 5 e no minimo 0");
 				throw new Exception("O resultado da instrucao levara o ponto y ultrapassar o perimetro de no maximo 5 e no minimo 0");
 			}
