@@ -7,13 +7,14 @@
   	</head>
   	<body>
     	<h1>Teste Programação Elo7</h1>
-    
-    	<label>Digite a posicção inical da sonda : </label>
-    	<input type="text" id="posicao" name="posicao" > <input type="button" onclick="enviarPosicao()" value="Posicionar"><br>
-    
+
+    	<label>Digite a posição inical da sonda : </label>
+    	<input type="text" maxlength="5" id="posicao" name="posicao"> <input type="button" onclick="enviarPosicao()" value="Posicionar"><br>
+
     	<label>Digite a instrução para a sonda : </label>
     	<input type="text" id="instrucao" name="instrucao"> <input type="button" onclick="enviarInstrucao()" value="Enviar Instrução"><br>
-		<br>
-		<span id="retorno"></span>
+
+		<br><span id="retorno"></span>
+
   	</body>
 </html>

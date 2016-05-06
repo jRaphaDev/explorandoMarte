@@ -70,18 +70,4 @@ public class SondaServiceTestIT {
         when().
         get(PATH+"/posicao/19N");
 	}
-	
-	@Test
-	public void setarInstrucao() {
-		expect().
-        statusCode(200).
-        when().
-        get(PATH+"/posicao/12N");
-		
-		expect().
-        statusCode(200).
-        when().
-        get(PATH+"/instrucao/M");
-	}
-
 }

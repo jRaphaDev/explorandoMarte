@@ -21,6 +21,9 @@ import br.com.elo7.model.Sonda;
 public class DefaultSondaLogic implements SondaLogic{
 
 	private Sonda sonda;
+	private int resultadoX;
+	private int resultadoY;
+	private char resultadoSentido;
 	private Logger logger = LoggerFactory.getLogger(DefaultSondaLogic.class);
 
 	public DefaultSondaLogic() {
@@ -65,6 +68,12 @@ public class DefaultSondaLogic implements SondaLogic{
     					direcionarSonda(instrucao.charAt(a));
     				}
     			}
+    			
+    			verificaPerimetro(resultadoX, resultadoY);
+    			
+    			sonda.setPosicaoX(resultadoX);
+    			sonda.setPosicaoY(resultadoY);
+    			sonda.setSentido(resultadoSentido);
     			sonda.setIniciada(false);
     			return pegarPosicaoAtual();
 		    } else {
@@ -107,21 +116,17 @@ public class DefaultSondaLogic implements SondaLogic{
             int posicaoY = Integer.parseInt(String.valueOf(posicao.charAt(1)));
             char sentido = posicao.charAt(2);
 
-			if (posicaoX > 8 || posicaoX < 0) {
-				logger.error("Posicionamento invalido, a posição x so e valida entre no minimo 0 e no maximo 8");
-				throw new Exception("Posicionamento invalido, a posição x so e valida entre no minimo 0 e no maximo 8");
-			}
-			
-			if (posicaoY > 5 || posicaoY < 0) {
-				logger.error("Posicionamento invalido, a posicao y so e valida entre no minimo 0 e no maximo 5");
-				throw new Exception("Posicionamento invalido, a posicao y so e valida entre no minimo 0 e no maximo 5");
-			}
+            verificaPerimetro(posicaoX, posicaoY);
 			
 			if (sentido != 'N' && sentido != 'S' && sentido != 'E' && sentido != 'W') {
 				logger.error("Ultimo argumento invalido, o sentido da sonda deve ser 'N', 'S', 'E' ou 'W'");
 				throw new Exception("Ultimo argumento invalido, o sentido da sonda deve ser 'N', 'S', 'E' ou 'W'");
 			}
 
+			resultadoX = posicaoX;
+			resultadoY = posicaoY;
+			resultadoSentido = sentido;
+			
 			return posicao;
 		} catch (NumberFormatException nfe) {
 			
@@ -138,18 +143,18 @@ public class DefaultSondaLogic implements SondaLogic{
 	 */
 	private void moverSonda() {
 		try {
-			switch (sonda.getSentido()) {
+			switch (resultadoSentido) {
 				case 'N':
-					sonda.setPosicaoY(sonda.getPosicaoY()+1);
+					resultadoY = resultadoY + 1;
 					break;
 				case 'S':
-					sonda.setPosicaoY(sonda.getPosicaoY()-1);
+					resultadoY = resultadoY - 1;
 					break;
 				case 'W':
-					sonda.setPosicaoX(sonda.getPosicaoX()-1);
+					resultadoX = resultadoX - 1;
 					break;
 				case 'E':
-					sonda.setPosicaoX(sonda.getPosicaoX()+1);
+					resultadoX = resultadoX + 1;
 					break;
 			}
 		} catch (Exception e) {
@@ -164,7 +169,7 @@ public class DefaultSondaLogic implements SondaLogic{
 	 */
 	private void direcionarSonda(char sentido) {
 		try {
-			switch (sonda.getSentido()) {
+			switch (resultadoSentido) {
 				case 'N':
 					sentido = (sentido=='L') ? 'W':'E';
 					break;
@@ -178,7 +183,7 @@ public class DefaultSondaLogic implements SondaLogic{
 					sentido = (sentido=='L') ? 'N':'S';
 					break;
 			}
-			sonda.setSentido(sentido);
+			resultadoSentido = sentido;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			throw e;
@@ -202,6 +207,25 @@ public class DefaultSondaLogic implements SondaLogic{
 				}
 			}
 			return instrucao;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw e;
+		}
+	}
+	
+	private void verificaPerimetro(int posX, int posY) throws Exception {
+		try {
+			if (posX > 8 || posX < 0) {
+				resultadoX = sonda.getPosicaoX();
+				logger.error("O resultado da instrucao levara o ponto x ultrapassar o perimetro de no maximo 8 e no minimo 0");
+				throw new Exception("O resultado da instrucao levara o ponto x ultrapassar o perimetro de no maximo 8 e no minimo 0");
+			}
+			
+			if (posY > 5 || posY < 0) {
+				resultadoY = sonda.getPosicaoY();
+				logger.error("O resultado da instrucao levara o ponto y ultrapassar o perimetro de no maximo 5 e no minimo 0");
+				throw new Exception("O resultado da instrucao levara o ponto y ultrapassar o perimetro de no maximo 5 e no minimo 0");
+			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			throw e;
