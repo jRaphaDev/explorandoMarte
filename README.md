@@ -1,19 +1,3 @@
-# Teste de Programação Elo7
-
-Como parte do processo seletivo do Elo7, gostaríamos que você fizesse uma 
-pequena tarefa. Conforme seu resultado daremos continuidade ao processo te 
-convidando para uma sessão de pair-programming.
- 
-Durante o desenvolvimento dê preferência para implementação em Java.
- 
-O objetivo dessa tarefa é avaliar como você vai desenvolver o código em termos 
-de estilo, eficiência e qualidade. 
- 
-Crie um projeto no seu Github para que vejamos os passos feitos através dos commits para resolver a tarefa.
-
-Sinta-se à vontade para criar em cima do problema abaixo. Caso algo não esteja claro, pode assumir o que seja mais claro para você e indique suas suposições em documentação. A especificação é bem básica e, portanto, caso deseje evoluir a ideia seguindo essa base, fique à vontade: por exemplo, adaptar as entradas e saídas para ser um serviço web, criar uma interface gráfica, etc.
-
-Qualquer dúvida maior pode nos perguntar, mas no geral, divirta-se!
 
 # Explorando Marte
 
